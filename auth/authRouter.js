@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const token = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 const Users = require('../users/user-model.js');
 const secrets = require('../api/secrets.js');
@@ -24,7 +24,7 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-    let {username, password, department} = req.body;
+    let {username, password} = req.body;
 
     Users.findBy({username})
         .then(([user]) => {
@@ -44,6 +44,7 @@ function generateToken(user) {
     const payload = {
         userId: user.id,
         username: user.username,
+        department: user.department
     };
     const secret = secrets.jwtSecret;
     const options = {
