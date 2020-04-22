@@ -3,9 +3,10 @@ const router = require('express').Router();
 const Users = require('./user-model.js');
 
 router.get('/', (req, res) => {
-    Users.find()
+    let department = req.decodedToken.department
+    Users.findByDepartment(department)
         .then(users => {
-            res.json(users);
+            res.json({users});
         })
         .catch(err => res.send(err));
 });
